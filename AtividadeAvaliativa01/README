@@ -1,0 +1,17 @@
+# Sistema de Login e Recuperação de Senha
+
+Primeira atividade avaliativa. Programa em Python + Tkinter.
+
+## Como executar
+```bash
+# Linux (Debian/Ubuntu/Lubuntu), se faltar o Tkinter:
+sudo apt install python3-tk
+
+python3 main.py
+```
+
+## Funcionamento
+- **Login:** confere usuário e senha no arquivo `usuarios.txt`. Se estiverem corretos, abre a janela do sistema; senão, mostra erro.
+- **Redefinir senha:** informa usuário, nova senha e confirmação. Só grava se o usuário existir e as senhas forem iguais.
+- **Armazenamento:** `usuarios.txt`, uma linha por usuário no formato `login;senha`.
+- Usuário de teste: `Fulano` / `1234`.
