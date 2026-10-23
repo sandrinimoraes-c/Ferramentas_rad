@@ -12,9 +12,14 @@ Os dados ficam no arquivo usuarios.txt, uma linha por usuário: login;senha
 import os
 import tkinter as tk
 from tkinter import messagebox
+import customtkinter as ctk  # A biblioteca mágica para design moderno
 
 ARQUIVO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "usuarios.txt")
 SEPARADOR = ";"
+
+# Configurações Globais de Tema do CustomTkinter
+ctk.set_appearance_mode("Light")  # Modos: "System", "Dark", "Light"
+ctk.set_default_color_theme("blue")  # Temas: "blue", "green", "dark-blue"
 
 
 # ----------------------------- Arquivo -----------------------------
@@ -46,30 +51,45 @@ def salvar_usuarios(usuarios):
 class App:
     def __init__(self, root):
         self.root = root
-        root.title("Sistema de Cadastro")
-        root.geometry("320x340")
-        root.resizable(False, False)
+        self.root.title("Acesso ao Sistema")
+        self.root.geometry("380x460")
+        self.root.resizable(False, False)
+        
+        # No CustomTkinter a cor de fundo padrão já é linda e limpa
 
-        tk.Label(root, text="Sistema de Cadastro", font=("Arial", 16)).pack(pady=(30, 25))
+        # Títulos principais
+        ctk.CTkLabel(root, text="Bem-vindo", font=("Segoe UI", 24, "bold")).pack(pady=(40, 5))
+        ctk.CTkLabel(root, text="Faça login para continuar", font=("Segoe UI", 13), text_color="#64748B").pack(pady=(0, 20))
 
-        form = tk.Frame(root)
-        form.pack()
-        tk.Label(form, text="Usuário:").grid(row=0, column=0, padx=5, pady=6, sticky="e")
-        self.ent_usuario = tk.Entry(form, width=22)
-        self.ent_usuario.grid(row=0, column=1)
-        tk.Label(form, text="Senha:").grid(row=1, column=0, padx=5, pady=6, sticky="e")
-        self.ent_senha = tk.Entry(form, width=22, show="*")
-        self.ent_senha.grid(row=1, column=1)
+        # Container do Formulário (Efeito de Card Moderno)
+        form = ctk.CTkFrame(root, fg_color="#FFFFFF", corner_radius=12, border_width=1, border_color="#E2E8F0")
+        form.pack(padx=30, pady=10, fill="both", expand=True)
 
-        botoes = tk.Frame(root)
-        botoes.pack(pady=20)
-        tk.Button(botoes, text="Entrar", width=9, command=self.entrar).grid(row=0, column=0, padx=8)
-        tk.Button(botoes, text="Sair", width=9, command=root.destroy).grid(row=0, column=1, padx=8)
+        # Campo: Usuário
+        ctk.CTkLabel(form, text="Usuário", font=("Segoe UI", 12, "bold"), text_color="#1E293B").pack(anchor="w", padx=25, pady=(20, 5))
+        self.ent_usuario = ctk.CTkEntry(form, width=270, height=40, corner_radius=8, placeholder_text="Digite seu usuário")
+        self.ent_usuario.pack(padx=25, pady=(0, 15))
+        
+        # Campo: Senha
+        ctk.CTkLabel(form, text="Senha", font=("Segoe UI", 12, "bold"), text_color="#1E293B").pack(anchor="w", padx=25, pady=(0, 5))
+        self.ent_senha = ctk.CTkEntry(form, width=270, height=40, corner_radius=8, placeholder_text="Digite sua senha", show="*")
+        self.ent_senha.pack(padx=25, pady=(0, 15))
 
-        link = tk.Label(root, text="Redefinir senha", fg="blue", cursor="hand2")
-        link.pack()
-        link.bind("<Button-1>", lambda e: self.abrir_redefinicao())
+        # Link de redefinição (Estilizado como botão de texto)
+        link = ctk.CTkButton(form, text="Esqueceu sua senha? Redefinir", font=("Segoe UI", 12, "underline"), fg_color="transparent", text_color="#2563EB", hover_color="#F1F5F9", cursor="hand2", command=self.abrir_redefinicao)
+        link.pack(pady=(5, 15))
 
+        # Botões de Ação na parte inferior
+        botoes_frame = ctk.CTkFrame(root, fg_color="transparent")
+        botoes_frame.pack(pady=(15, 25), fill="x", padx=30)
+        
+        self.btn_entrar = ctk.CTkButton(botoes_frame, text="Entrar", width=150, height=40, font=("Segoe UI", 13, "bold"), corner_radius=8, command=self.entrar)
+        self.btn_entrar.pack(side="left", padx=(0, 10))
+        
+        btn_sair = ctk.CTkButton(botoes_frame, text="Sair", width=150, height=40, font=("Segoe UI", 13), fg_color="#E2E8F0", text_color="#1E293B", hover_color="#CBD5E1", corner_radius=8, command=root.destroy)
+        btn_sair.pack(side="right")
+
+        # Atalho do Enter e Focus automático
         root.bind("<Return>", lambda e: self.entrar())
         self.ent_usuario.focus()
 
@@ -92,12 +112,18 @@ class App:
     def abrir_janela_principal(self, login, senha):
         """Segunda janela do programa (só abre com login válido)."""
         self.root.withdraw()
-        janela = tk.Toplevel(self.root)
-        janela.title("Área do sistema")
-        janela.geometry("320x200")
+        janela = ctk.CTkToplevel(self.root)
+        janela.title("Área do Sistema")
+        janela.geometry("360x260")
+        janela.resizable(False, False)
 
-        tk.Label(janela, text=f"Login: {login}").pack(anchor="w", padx=20, pady=(20, 5))
-        tk.Label(janela, text=f"Senha: {senha}").pack(anchor="w", padx=20)
+        ctk.CTkLabel(janela, text="Acesso Autorizado 🎉", font=("Segoe UI", 20, "bold"), text_color="#16A34A").pack(pady=(25, 15))
+        
+        info_frame = ctk.CTkFrame(janela, fg_color="#F8FAFC", corner_radius=10, border_width=1, border_color="#E2E8F0")
+        info_frame.pack(padx=30, fill="x", pady=5)
+        
+        ctk.CTkLabel(info_frame, text=f"Usuário:  {login}", font=("Segoe UI", 13, "bold"), text_color="#1E293B").pack(anchor="w", padx=20, pady=(15, 5))
+        ctk.CTkLabel(info_frame, text=f"Senha:  {senha}", font=("Segoe UI", 13), text_color="#475569").pack(anchor="w", padx=20, pady=(0, 15))
 
         def fechar():
             janela.destroy()
@@ -107,30 +133,36 @@ class App:
             self.ent_usuario.focus()
 
         janela.protocol("WM_DELETE_WINDOW", fechar)
-        tk.Button(janela, text="Voltar", command=fechar).pack(pady=25)
+        
+        btn_voltar = ctk.CTkButton(janela, text="Voltar para o Login", height=38, corner_radius=8, fg_color="#1E293B", hover_color="#0F172A", command=fechar)
+        btn_voltar.pack(pady=20, padx=30, fill="x")
 
     # ---- Redefinir senha ----
     def abrir_redefinicao(self):
-        janela = tk.Toplevel(self.root)
-        janela.title("Redefinir senha")
-        janela.geometry("320x300")
+        janela = ctk.CTkToplevel(self.root)
+        janela.title("Redefinir Senha")
+        janela.geometry("380x460")
         janela.resizable(False, False)
-        janela.wait_visibility()
+        janela.after(100, lambda: janela.focus()) # Garante o foco na nova janela
         janela.grab_set()
 
-        tk.Label(janela, text="Redefinir senha", font=("Arial", 12)).pack(pady=(25, 20))
+        ctk.CTkLabel(janela, text="Recuperação de Conta", font=("Segoe UI", 20, "bold")).pack(pady=(25, 5))
+        ctk.CTkLabel(janela, text="Preencha os dados para atualizar", font=("Segoe UI", 12), text_color="#64748B").pack(pady=(0, 10))
 
-        form = tk.Frame(janela)
-        form.pack()
-        tk.Label(form, text="Usuário:").grid(row=0, column=0, padx=5, pady=6, sticky="e")
-        ent_user = tk.Entry(form, width=22)
-        ent_user.grid(row=0, column=1)
-        tk.Label(form, text="Senha:").grid(row=1, column=0, padx=5, pady=6, sticky="e")
-        ent_nova = tk.Entry(form, width=22, show="*")
-        ent_nova.grid(row=1, column=1)
-        tk.Label(form, text="Confirme a\nsenha:").grid(row=2, column=0, padx=5, pady=6, sticky="e")
-        ent_conf = tk.Entry(form, width=22, show="*")
-        ent_conf.grid(row=2, column=1)
+        form = ctk.CTkFrame(janela, fg_color="#FFFFFF", corner_radius=12, border_width=1, border_color="#E2E8F0")
+        form.pack(padx=30, pady=5, fill="both", expand=True)
+
+        ctk.CTkLabel(form, text="Confirmar Usuário:", font=("Segoe UI", 12, "bold"), text_color="#1E293B").pack(anchor="w", padx=25, pady=(15, 3))
+        ent_user = ctk.CTkEntry(form, width=270, height=36, corner_radius=8)
+        ent_user.pack(padx=25, pady=(0, 10))
+
+        ctk.CTkLabel(form, text="Nova Senha:", font=("Segoe UI", 12, "bold"), text_color="#1E293B").pack(anchor="w", padx=25, pady=(0, 3))
+        ent_nova = ctk.CTkEntry(form, width=270, height=36, corner_radius=8, show="*")
+        ent_nova.pack(padx=25, pady=(0, 10))
+
+        ctk.CTkLabel(form, text="Confirmar Nova Senha:", font=("Segoe UI", 12, "bold"), text_color="#1E293B").pack(anchor="w", padx=25, pady=(0, 3))
+        ent_conf = ctk.CTkEntry(form, width=270, height=36, corner_radius=8, show="*")
+        ent_conf.pack(padx=25, pady=(0, 15))
 
         def salvar():
             login = ent_user.get().strip()
@@ -157,15 +189,21 @@ class App:
             messagebox.showinfo("Sucesso", "Senha redefinida com sucesso!", parent=janela)
             janela.destroy()
 
-        btns = tk.Frame(janela)
-        btns.pack(pady=25)
-        tk.Button(btns, text="Salvar", width=9, command=salvar).grid(row=0, column=0, padx=8)
-        tk.Button(btns, text="Cancelar", width=9, command=janela.destroy).grid(row=0, column=1, padx=8)
+        btns = ctk.CTkFrame(janela, fg_color="transparent")
+        btns.pack(pady=(15, 25), fill="x", padx=30)
+        
+        btn_salvar = ctk.CTkButton(btns, text="Salvar", width=150, height=40, font=("Segoe UI", 13, "bold"), corner_radius=8, command=salvar)
+        btn_salvar.pack(side="left", padx=(0, 10))
+        
+        btn_cancelar = ctk.CTkButton(btns, text="Cancelar", width=150, height=40, font=("Segoe UI", 13), fg_color="#E2E8F0", text_color="#1E293B", hover_color="#CBD5E1", corner_radius=8, command=janela.destroy)
+        btn_cancelar.pack(side="right")
+        
         ent_user.focus()
 
 
 if __name__ == "__main__":
-    carregar_usuarios()  # garante que o arquivo exista
-    raiz = tk.Tk()
+    carregar_usuarios()
+    # Inicialização padrão do CustomTkinter usa ctk.CTk() no lugar de tk.Tk()
+    raiz = ctk.CTk()
     App(raiz)
     raiz.mainloop()
