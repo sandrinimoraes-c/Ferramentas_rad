@@ -1,17 +1,54 @@
 # Sistema de Login e Recuperação de Senha
 
-Primeira atividade avaliativa. Programa em Python + Tkinter.
+Primeira atividade avaliativa. Programa desenvolvido em Python utilizando a biblioteca **CustomTkinter** para uma experiência visual moderna e fluida.
 
-## Como executar
+---
+
+## 📱 Especificação das Telas
+
+O sistema é composto por três interfaces principais integradas:
+
+1. **Tela de Login:** 
+   - Campos para entrada de `Usuário` e `Senha`.
+   - Botão **Entrar**: Valida as credenciais digitadas.
+   - Botão **Sair**: Encerra e destrói o processo do aplicativo.
+   - Link **Redefinir senha**: Abre a janela de recuperação de conta em primeiro plano.
+2. **Janela Pós-Login (Painel do Sistema):**
+   - Só é acessível mediante autenticação válida.
+   - Exibe temporariamente em um bloco seguro as credenciais (`Login` e `Senha`) informadas pelo usuário logado.
+3. **Redefinir Senha:**
+   - Janela focada independente que exige a confirmação do `Usuário`, digitação da `Nova Senha` e `Confirmação de Senha`.
+
+---
+
+## 💾 Regras de Negócio e Armazenamento
+
+- **Banco de Dados Plano:** Os dados são persistidos localmente no arquivo estruturado `usuarios.txt`.
+- **Formatação:** Cada usuário ocupa exatamente uma linha, respeitando a estrutura literal `login;senha`.
+- **Segurança Sútil:** O sistema impede nativamente o cadastro de logins ou senhas contendo o caractere delimitador `;` para evitar quebras no banco de dados.
+- **Usuário Padrão de Fábrica:** Caso o arquivo `usuarios.txt` não exista na primeira inicialização, o sistema cria o registro administrativo padrão: `Sandrini` / `1234`.
+
+---
+
+## 🚀 Pré-requisitos e Como Executar
+
+### 1. Instalar Dependências Gratuitas
+Certifique-se de baixar e instalar a biblioteca responsável pelos componentes visuais arredondados:
+
 ```bash
-# Linux (Debian/Ubuntu/Lubuntu), se faltar o Tkinter:
-sudo apt install python3-tk
-
-python3 main.py
+pip install customtkinter
 ```
 
-## Funcionamento
-- **Login:** confere usuário e senha no arquivo `usuarios.txt`. Se estiverem corretos, abre a janela do sistema; senão, mostra erro.
-- **Redefinir senha:** informa usuário, nova senha e confirmação. Só grava se o usuário existir e as senhas forem iguais.
-- **Armazenamento:** `usuarios.txt`, uma linha por usuário no formato `login;senha`.
-- Usuário de teste: `Fulano` / `1234`.
+### 2. Suporte de Sistema (Exclusivo Linux)
+Caso execute o código em distribuições baseadas em Debian/Ubuntu (ou ambientes em nuvem como o GitHub Codespaces) e acuse ausência do display gráfico do Tkinter, execute:
+
+```bash
+sudo apt install python3-tk
+```
+
+### 3. Executando o Projeto
+Com o terminal aberto no diretório do arquivo, rode:
+
+```bash
+python3 main.py
+```

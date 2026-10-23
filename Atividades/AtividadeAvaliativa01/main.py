@@ -1,34 +1,21 @@
-"""
-Sistema de Cadastro - login e redefinição de senha.
-
-Telas:
-  1. Login (Usuário, Senha, Entrar, Sair, Redefinir senha)
-  2. Janela pós-login (mostra Login e Senha do usuário)
-  3. Redefinir senha (Usuário, Senha, Confirme a senha)
-
-Os dados ficam no arquivo usuarios.txt, uma linha por usuário: login;senha
-"""
-
 import os
 import tkinter as tk
 from tkinter import messagebox
-import customtkinter as ctk  # A biblioteca mágica para design moderno
+import customtkinter as ctk
 
 ARQUIVO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "usuarios.txt")
 SEPARADOR = ";"
 
-# Configurações Globais de Tema do CustomTkinter
-ctk.set_appearance_mode("Light")  # Modos: "System", "Dark", "Light"
-ctk.set_default_color_theme("blue")  # Temas: "blue", "green", "dark-blue"
+# Configuração do Tema
+ctk.set_appearance_mode("Light")
+ctk.set_default_color_theme("blue")
 
 
-# ----------------------------- Arquivo -----------------------------
+# ----------------------------- Banco de Dados -----------------------------
 def carregar_usuarios():
-    """Lê o arquivo e devolve um dicionário {login: senha}.
-    Se o arquivo não existir, cria com o usuário de exemplo Fulano/1234."""
     if not os.path.exists(ARQUIVO):
         with open(ARQUIVO, "w", encoding="utf-8") as f:
-            f.write(f"Fulano{SEPARADOR}1234\n")
+            f.write(f"Sandrini{SEPARADOR}1234\n")
 
     usuarios = {}
     with open(ARQUIVO, "r", encoding="utf-8") as f:
@@ -41,13 +28,12 @@ def carregar_usuarios():
 
 
 def salvar_usuarios(usuarios):
-    """Grava todo o dicionário de volta no arquivo."""
     with open(ARQUIVO, "w", encoding="utf-8") as f:
         for login, senha in usuarios.items():
             f.write(f"{login}{SEPARADOR}{senha}\n")
 
 
-# ------------------------------ Telas ------------------------------
+# ------------------------------ Interface ------------------------------
 class App:
     def __init__(self, root):
         self.root = root
@@ -55,31 +41,27 @@ class App:
         self.root.geometry("380x460")
         self.root.resizable(False, False)
         
-        # No CustomTkinter a cor de fundo padrão já é linda e limpa
-
-        # Títulos principais
+        # Cabeçalho
         ctk.CTkLabel(root, text="Bem-vindo", font=("Segoe UI", 24, "bold")).pack(pady=(40, 5))
         ctk.CTkLabel(root, text="Faça login para continuar", font=("Segoe UI", 13), text_color="#64748B").pack(pady=(0, 20))
 
-        # Container do Formulário (Efeito de Card Moderno)
+        # Formulário de Login
         form = ctk.CTkFrame(root, fg_color="#FFFFFF", corner_radius=12, border_width=1, border_color="#E2E8F0")
         form.pack(padx=30, pady=10, fill="both", expand=True)
 
-        # Campo: Usuário
         ctk.CTkLabel(form, text="Usuário", font=("Segoe UI", 12, "bold"), text_color="#1E293B").pack(anchor="w", padx=25, pady=(20, 5))
         self.ent_usuario = ctk.CTkEntry(form, width=270, height=40, corner_radius=8, placeholder_text="Digite seu usuário")
         self.ent_usuario.pack(padx=25, pady=(0, 15))
         
-        # Campo: Senha
         ctk.CTkLabel(form, text="Senha", font=("Segoe UI", 12, "bold"), text_color="#1E293B").pack(anchor="w", padx=25, pady=(0, 5))
         self.ent_senha = ctk.CTkEntry(form, width=270, height=40, corner_radius=8, placeholder_text="Digite sua senha", show="*")
         self.ent_senha.pack(padx=25, pady=(0, 15))
 
-        # Link de redefinição (Estilizado como botão de texto)
+        # Link recuperar senha
         link = ctk.CTkButton(form, text="Esqueceu sua senha? Redefinir", font=("Segoe UI", 12, "underline"), fg_color="transparent", text_color="#2563EB", hover_color="#F1F5F9", cursor="hand2", command=self.abrir_redefinicao)
         link.pack(pady=(5, 15))
 
-        # Botões de Ação na parte inferior
+        # Botões de Ação
         botoes_frame = ctk.CTkFrame(root, fg_color="transparent")
         botoes_frame.pack(pady=(15, 25), fill="x", padx=30)
         
@@ -89,7 +71,6 @@ class App:
         btn_sair = ctk.CTkButton(botoes_frame, text="Sair", width=150, height=40, font=("Segoe UI", 13), fg_color="#E2E8F0", text_color="#1E293B", hover_color="#CBD5E1", corner_radius=8, command=root.destroy)
         btn_sair.pack(side="right")
 
-        # Atalho do Enter e Focus automático
         root.bind("<Return>", lambda e: self.entrar())
         self.ent_usuario.focus()
 
@@ -110,7 +91,6 @@ class App:
             self.ent_senha.delete(0, tk.END)
 
     def abrir_janela_principal(self, login, senha):
-        """Segunda janela do programa (só abre com login válido)."""
         self.root.withdraw()
         janela = ctk.CTkToplevel(self.root)
         janela.title("Área do Sistema")
@@ -143,7 +123,7 @@ class App:
         janela.title("Redefinir Senha")
         janela.geometry("380x460")
         janela.resizable(False, False)
-        janela.after(100, lambda: janela.focus()) # Garante o foco na nova janela
+        janela.after(100, lambda: janela.focus())
         janela.grab_set()
 
         ctk.CTkLabel(janela, text="Recuperação de Conta", font=("Segoe UI", 20, "bold")).pack(pady=(25, 5))
@@ -203,7 +183,7 @@ class App:
 
 if __name__ == "__main__":
     carregar_usuarios()
-    # Inicialização padrão do CustomTkinter usa ctk.CTk() no lugar de tk.Tk()
     raiz = ctk.CTk()
     App(raiz)
     raiz.mainloop()
+
