@@ -115,7 +115,8 @@ class App:
         janela.title("Redefinir senha")
         janela.geometry("320x300")
         janela.resizable(False, False)
-        janela.grab_set()  # bloqueia a janela de trás enquanto esta estiver aberta
+        janela.wait_visibility()
+        janela.grab_set()
 
         tk.Label(janela, text="Redefinir senha", font=("Arial", 12)).pack(pady=(25, 20))
 
