@@ -1,0 +1,3 @@
+A ativide consiste em fazer todos os exercícios da lista e enviar para este repositório remoto usando Git/GitHub. Crie uma submeta uma solicitação de PULL REQUEST para o proprietário avaliar e, possivelmente, mesclar com o conteúdo. Lembre-se, execute o comando git pull para obter uma versão atualizada do git antes de criar o ramo alternativo.
+
+OBRIGATORIAMENTE, nomeie seus programas usando a seguinte nomenclatura: SeuNome_exercicio1.py
